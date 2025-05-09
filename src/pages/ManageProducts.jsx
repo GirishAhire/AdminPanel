@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
-  Card,
-  CardContent,
   Typography,
   Grid,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Pagination,
+  Box,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   getAllProducts,
   updateProduct,
   deleteProduct,
+  getLowStockProducts,
 } from "../services/api";
+import ProductCard from "../components/ProductCard";
+import EditProductDialog from "../components/EditProductDialog";
+import Sidebar from "../components/Dashboard/Sidebar";
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -24,19 +23,29 @@ const ManageProducts = () => {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const fetchProducts = (pageNum = 1) => {
-    getAllProducts(pageNum)
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    getAllProducts(page)
       .then((res) => {
         setProducts(res.data.products);
         setTotalPages(res.data.totalPages);
       })
       .catch((err) => console.error(err));
-  };
+  }, [page]);
 
   useEffect(() => {
-    fetchProducts(page);
-  }, [page]);
+    getLowStockProducts()
+      .then((res) => {
+        setLowStockCount(res.data.count);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const handleDelete = (id) => {
     deleteProduct(id)
@@ -51,140 +60,113 @@ const ManageProducts = () => {
     setOpen(true);
   };
 
+  const handleChange = (field, value) => {
+    setSelectedProduct({ ...selectedProduct, [field]: value });
+  };
+
   const handleSave = () => {
     updateProduct(selectedProduct._id, selectedProduct)
       .then(() => {
         setProducts((prev) =>
-          prev.map((p) => (p._id === selectedProduct._id ? selectedProduct : p))
+          prev.map((p) =>
+            p._id === selectedProduct._id ? selectedProduct : p
+          )
         );
         setOpen(false);
       })
       .catch((err) => console.error(err));
   };
 
-  const handleChange = (field, value) => {
-    setSelectedProduct({ ...selectedProduct, [field]: value });
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/admin/login";
+  };
+
+  const cardStyle = {
+    p: 2,
+    borderRadius: 2,
+    boxShadow: 3,
+    transition: "transform 0.2s ease-in-out",
+    cursor: "pointer",
+    width: "100%",
+    "&:hover": {
+      transform: "scale(1.02)",
+      boxShadow: 6,
+    },
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <Typography variant="h4" gutterBottom>
-        Manage All Products
-      </Typography>
-
-      <Grid container spacing={2}>
-        {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product._id}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">{product.name}</Typography>
-                <Typography>Description: {product.description}</Typography>
-                <Typography>Category: {product.category}</Typography>
-                <Typography>Brand: {product.brand}</Typography>
-                <Typography>Price: ₹{product.price}</Typography>
-                <Typography>Stock: {product.stock_quantity}</Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleEdit(product)}
-                  style={{ marginTop: "10px", marginRight: "10px" }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleDelete(product._id)}
-                  style={{ marginTop: "10px" }}
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Pagination */}
-      <div style={{ marginTop: "2rem", display: "flex", justifyContent: "center" }}>
-        <Pagination
-          count={totalPages}
-          page={page}
-          onChange={(e, value) => setPage(value)}
-          color="primary"
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: isSmallScreen ? "column" : "row",
+        minHeight: "100vh",
+      }}
+    >
+      {/* Sidebar */}
+      <Box
+        sx={{
+          width: isSmallScreen ? "100%" : 300,
+          flexShrink: 0,
+          borderRight: isSmallScreen ? "none" : "1px solid #e0e0e0",
+          overflowY: "auto",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Sidebar
+          loading={loading}
+          lowStockCount={lowStockCount}
+          onLogout={handleLogout}
+          cardStyle={cardStyle}
+          theme={theme}
+          isSmallScreen={isSmallScreen}
         />
-      </div>
+      </Box>
 
-      {/* Edit Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Edit Product</DialogTitle>
-        <DialogContent>
-          {selectedProduct && (
-            <>
-              <TextField
-                label="Name"
-                value={selectedProduct.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Description"
-                value={selectedProduct.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Category"
-                value={selectedProduct.category}
-                onChange={(e) => handleChange("category", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Brand"
-                value={selectedProduct.brand}
-                onChange={(e) => handleChange("brand", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Price"
-                type="number"
-                value={selectedProduct.price}
-                onChange={(e) => handleChange("price", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Stock Quantity"
-                type="number"
-                value={selectedProduct.stock_quantity}
-                onChange={(e) => handleChange("stock_quantity", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              <TextField
-                label="Image URL"
-                value={selectedProduct.image_url}
-                onChange={(e) => handleChange("image_url", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary" variant="contained">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+      {/* Main Content */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          p: isSmallScreen ? 2 : 4,
+          backgroundColor: "#f9f9f9",
+          overflowY: "auto",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Manage All Products
+        </Typography>
+
+        <ProductCard
+          products={products}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+
+        <Box
+          sx={{
+            marginTop: "2rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(e, value) => setPage(value)}
+            color="primary"
+          />
+        </Box>
+
+        <EditProductDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          product={selectedProduct}
+          onChange={handleChange}
+          onSave={handleSave}
+        />
+      </Box>
+    </Box>
   );
 };
 
