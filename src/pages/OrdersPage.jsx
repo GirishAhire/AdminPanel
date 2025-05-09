@@ -105,7 +105,7 @@ const OrdersPage = () => {
                                             <MenuItem value="Pending">Pending</MenuItem>
                                             <MenuItem value="Shipped">Shipped</MenuItem>
                                             <MenuItem value="Delivered">Delivered</MenuItem>
-                                            <MenuItem value="Cancelled">Cancelled</MenuItem>
+                                            
                                         </Select>
                                     </FormControl>
                                 </CardContent>
