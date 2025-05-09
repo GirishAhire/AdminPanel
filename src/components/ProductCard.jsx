@@ -5,8 +5,8 @@ import {
     CardContent,
     Typography,
     Button,
-    Box,
     Divider,
+    Box,
 } from "@mui/material";
 
 const ProductCard = ({ products, onEdit, onDelete }) => {
@@ -14,15 +14,19 @@ const ProductCard = ({ products, onEdit, onDelete }) => {
         return <Typography>No products found.</Typography>;
 
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justifyContent="center">
             {products.map((product) => (
-                <Grid item xs={12} key={product._id}>
+                <Grid item xs={12} sm={6} md={4} key={product._id}>
                     <Card
                         sx={{
-                            minHeight: 220,
+                            height: 300,
+                            width: 275,
+                            maxWidth: 380,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
                             boxShadow: 3,
                             borderRadius: 4,
-                            overflow: "hidden",
                             background: "linear-gradient(to right, #f8fafc, #e2e8f0)",
                             transition: "0.3s ease-in-out",
                             "&:hover": {
@@ -31,108 +35,93 @@ const ProductCard = ({ products, onEdit, onDelete }) => {
                             },
                         }}
                     >
-                        <Grid
-                            container
-                            spacing={2}
-                            alignItems="stretch"
-                            sx={{ height: "100%" }}
+                        <CardContent
+                            sx={{
+                                flexGrow: 1,
+                                overflow: "hidden",
+                            }}
                         >
-                            {/* Product Details */}
-                            <Grid item xs={12} sm={9}>
-                                <CardContent
+                            <Typography
+                                variant="h6"
+                                sx={{ fontWeight: 700, color: "#1f2937", mb: 1 }}
+                            >
+                                {product.name}
+                            </Typography>
+
+                            <Box sx={{ mb: 1 }}>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ color: "#374151", fontWeight: 600 }}
+                                >
+                                    Description:
+                                </Typography>
+                                <Typography
+                                    variant="body2"
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        p: 3,
-                                        height: 200,
+                                        color: "#374151",
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: "vertical",
                                         overflow: "hidden",
+                                        textOverflow: "ellipsis",
                                     }}
                                 >
-                                    <Typography
-                                        variant="h6"
-                                        sx={{ fontWeight: 700, color: "#1f2937", mb: 1 }}
-                                    >
-                                        {product.name}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            color: "#374151",
-                                            mb: 0.5,
-                                            display: "-webkit-box",
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: "vertical",
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
-                                        }}
-                                    >
-                                        <strong>Description:</strong> {product.description}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
-                                        <strong>Category:</strong> {product.category}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
-                                        <strong>Brand:</strong> {product.brand}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
-                                        <strong>Price:</strong> ₹{product.price}
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: "#374151" }}>
-                                        <strong>Stock:</strong> {product.stock_quantity}
-                                    </Typography>
-                                </CardContent>
-                            </Grid>
+                                    {product.description}
+                                </Typography>
+                            </Box>
 
-                            {/* Vertical Divider for larger screens */}
-                            <Divider
-                                orientation="vertical"
-                                flexItem
-                                sx={{ display: { xs: "none", sm: "block" }, my: 2 }}
-                            />
+                            <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                                <strong>Category:</strong> {product.category}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                                <strong>Brand:</strong> {product.brand}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                                <strong>Price:</strong> ₹{product.price}
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: "#374151" }}>
+                                <strong>Stock:</strong> {product.stock_quantity}
+                            </Typography>
+                        </CardContent>
 
-                            {/* Actions */}
-                            <Grid
-                                item
-                                xs={12}
-                                sm={3}
+                        <Divider sx={{ my: 1 }} />
+
+                        <Box
+                            sx={{
+                                px: 2,
+                                pb: 2,
+                                display: "flex",
+                                justifyContent: "space-between",
+                                gap: 1,
+                            }}
+                        >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={() => onEdit(product)}
                                 sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    gap: 1,
-                                    p: 2,
+                                    fontWeight: 600,
+                                    textTransform: "none",
+                                    borderRadius: 2,
                                 }}
                             >
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => onEdit(product)}
-                                    sx={{
-                                        width: "100%",
-                                        fontWeight: 600,
-                                        textTransform: "none",
-                                        borderRadius: 2,
-                                    }}
-                                >
-                                    Edit
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    onClick={() => onDelete(product._id)}
-                                    sx={{
-                                        width: "100%",
-                                        fontWeight: 600,
-                                        textTransform: "none",
-                                        borderRadius: 2,
-                                    }}
-                                >
-                                    Delete
-                                </Button>
-                            </Grid>
-                        </Grid>
+                                Edit
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                fullWidth
+                                onClick={() => onDelete(product._id)}
+                                sx={{
+                                    fontWeight: 600,
+                                    textTransform: "none",
+                                    borderRadius: 2,
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        </Box>
                     </Card>
                 </Grid>
             ))}
