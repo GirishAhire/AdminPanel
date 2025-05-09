@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import ManageProducts from "./pages/ManageProducts";
 import ManageLowStock from "./pages/ManageLowStock";
 import AddProduct from "./pages/AddProduct";
+import OrdersPage from "./pages/OrdersPage"; // ✅ Import the new OrdersPage
 
 const App = () => {
   return (
@@ -12,7 +13,8 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/manage" element={<ManageProducts />} />
         <Route path="/low-stock" element={<ManageLowStock />} />
-        <Route path="/add-product" element={<AddProduct />} /> {/* Add the route */}
+        <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/admin/orders" element={<OrdersPage />} /> {/* ✅ New route */}
       </Routes>
     </Router>
   );

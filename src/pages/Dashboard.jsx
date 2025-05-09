@@ -31,11 +31,8 @@ const Dashboard = () => {
 
       <Grid container spacing={2}>
         {/* Manage All Products */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate("/manage")}
-          >
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => navigate("/manage")}>
             <CardContent>
               <Typography variant="h6">Manage All Products</Typography>
               <Typography variant="body2">
@@ -46,11 +43,8 @@ const Dashboard = () => {
         </Grid>
 
         {/* Low Stock Products */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate("/low-stock")}
-          >
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => navigate("/low-stock")}>
             <CardContent>
               <Typography variant="h6">Low Stock Products</Typography>
               {loading ? (
@@ -63,15 +57,24 @@ const Dashboard = () => {
         </Grid>
 
         {/* Add New Product */}
-        <Grid item xs={12} sm={6} md={4}>
-          <Card
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate("/add-product")}
-          >
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => navigate("/add-product")}>
             <CardContent>
               <Typography variant="h6">Add New Product</Typography>
               <Typography variant="body2">
                 Add a new product to the inventory
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* View All Orders */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ cursor: "pointer" }} onClick={() => navigate("/admin/orders")}>
+            <CardContent>
+              <Typography variant="h6">View All Orders</Typography>
+              <Typography variant="body2">
+                Check all customer orders and shipping status
               </Typography>
             </CardContent>
           </Card>
