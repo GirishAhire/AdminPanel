@@ -16,7 +16,7 @@ const ProductCard = ({ products, onEdit, onDelete }) => {
     return (
         <Grid container spacing={3} justifyContent="center">
             {products.map((product) => (
-                <Grid item xs={12} sm={6} md={4} key={product._id}>
+                <Grid item xs={12} sm={6} mt={5} md={4} key={product._id}>
                     <Card
                         sx={{
                             height: 300,

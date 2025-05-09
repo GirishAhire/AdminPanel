@@ -55,9 +55,16 @@ const Sidebar = ({ loading, lowStockCount, onLogout, cardStyle, isSmallScreen })
         <Paper elevation={4} sx={sidebarStyle}>
             <Box>
                 <Box sx={{ mb: 4, textAlign: "center" }}>
-                    <Typography variant="h4" fontWeight={700} color="primary">
+                    <Typography
+                        variant="h4"
+                        fontWeight={700}
+                        color="primary"
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => navigate("/admin/dashboard")} // change this route if needed
+                    >
                         Admin Panel
                     </Typography>
+
                     <Divider sx={{ mt: 1, borderColor: "primary.main" }} />
                 </Box>
 
