@@ -25,14 +25,16 @@ const AnalyticsPanel = ({ analytics = [], loading }) => {
             sx={{
                 p: 4,
                 borderRadius: 4,
-                backgroundColor:
-                    theme.palette.mode === "light" ? "#fefefe" : "#1c1c1c",
-                boxShadow: theme.shadows[6],
+                width: "100%",
+                background: "linear-gradient(to right, #f8fafc, #e2e8f0)", // match order card gradient
+                boxShadow: 3,
                 transition: "all 0.3s ease",
                 "&:hover": {
-                    boxShadow: theme.shadows[8],
+                    transform: "scale(1.01)",
+                    boxShadow: 6,
                 },
             }}
+
         >
             <Typography
                 variant="h5"

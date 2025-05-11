@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import WarningIcon from "@mui/icons-material/Warning";
 import {
   Grid,
   Card,
@@ -86,7 +87,22 @@ const ProductList = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <Typography variant="h4" gutterBottom>
+
+      <Typography
+        variant="h5"
+        fontWeight={800}
+        color="primary"
+        gutterBottom
+        sx={{
+          letterSpacing: 0.5,
+          mb: 3,
+          pb: 1,
+          borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <WarningIcon color="error" sx={{ mr: 1 }} />
         Manage Low Stock Products
       </Typography>
 

@@ -50,9 +50,30 @@ const AdminLogin = () => {
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 10 }}>
-            <Paper sx={{ p: 4, width: 350 }}>
-                <Typography variant="h5" gutterBottom fontWeight={600}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems:"center", mt: 12, px: 2 }}>
+            <Paper
+                elevation={3}
+                sx={{
+                    p: 4,
+                    width: "100%",
+                    maxWidth: 400,
+                    borderRadius: 4,
+                    background: "linear-gradient(to right, #f8fafc, #e2e8f0)",
+                    transition: "0.3s ease-in-out",
+                    boxShadow: 3,
+                    "&:hover": {
+                        transform: "scale(1.01)",
+                        boxShadow: 6,
+                    },
+                }}
+            >
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    fontWeight={700}
+                    color="#1f2937"
+                    align="center"
+                >
                     Admin Login
                 </Typography>
 
@@ -63,7 +84,26 @@ const AdminLogin = () => {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        sx={{ mt: 2 }}
+                        sx={{
+                            mt: 3,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "12px",
+                                backgroundColor: "#f8fafc",
+                                boxShadow: "0 1px 4px rgba(0, 0, 0, 0.05)",
+                                transition: "all 0.3s ease-in-out",
+                                "&:hover": {
+                                    backgroundColor: "#e3f2fd",
+                                },
+                                "&.Mui-focused": {
+                                    backgroundColor: "#ffffff",
+                                    boxShadow: "0 0 0 3px rgba(25, 118, 210, 0.2)",
+                                },
+                            },
+                            "& .MuiInputLabel-root": {
+                                fontWeight: 600,
+                                color: "#374151",
+                            },
+                        }}
                         required
                     />
                     <TextField
@@ -72,7 +112,26 @@ const AdminLogin = () => {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        sx={{ mt: 2 }}
+                        sx={{
+                            mt: 2,
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "12px",
+                                backgroundColor: "#f8fafc",
+                                boxShadow: "0 1px 4px rgba(0, 0, 0, 0.05)",
+                                transition: "all 0.3s ease-in-out",
+                                "&:hover": {
+                                    backgroundColor: "#e3f2fd",
+                                },
+                                "&.Mui-focused": {
+                                    backgroundColor: "#ffffff",
+                                    boxShadow: "0 0 0 3px rgba(25, 118, 210, 0.2)",
+                                },
+                            },
+                            "& .MuiInputLabel-root": {
+                                fontWeight: 600,
+                                color: "#374151",
+                            },
+                        }}
                         required
                     />
                     {error && (
@@ -84,10 +143,20 @@ const AdminLogin = () => {
                         fullWidth
                         variant="contained"
                         type="submit"
-                        sx={{ mt: 3 }}
+                        sx={{
+                            mt: 3,
+                            fontWeight: 600,
+                            borderRadius: "10px",
+                            letterSpacing: 1,
+                            background: "linear-gradient(to right, #1976d2, #0d47a1)",
+                        }}
                         disabled={loading}
                     >
-                        {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+                        {loading ? (
+                            <CircularProgress size={24} color="inherit" />
+                        ) : (
+                            "Login"
+                        )}
                     </Button>
                 </form>
             </Paper>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Inventory2Icon from '@mui/icons-material/Inventory2';
 import {
   Typography,
   Grid,
@@ -133,18 +134,22 @@ const ManageProducts = () => {
           overflowY: "auto",
         }}
       >
+
         <Typography
-          variant="h4"
+          variant="h5"
+          fontWeight={800}
+          color="primary"
           gutterBottom
           sx={{
-            fontWeight: 700,
-            color: "#1f2937",
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            fontFamily: "Poppins, sans-serif",
-            textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
+            letterSpacing: 0.5,
+            mb: 3,
+            pb: 1,
+            borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+            display: "flex",
+            alignItems: "center",
           }}
         >
+          <Inventory2Icon color="primary" sx={{ mr: 1 }} />
           Manage All Products
         </Typography>
 

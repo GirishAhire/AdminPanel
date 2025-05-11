@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import {
     Box,
     Typography,
@@ -55,7 +56,21 @@ const OrdersContent = () => {
 
     return (
         <Box sx={{ flexGrow: 1, p: 3, backgroundColor: "#f9f9f9", overflowY: "auto" }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography
+                variant="h5"
+                fontWeight={800}
+                color="info"
+                gutterBottom
+                sx={{
+                    letterSpacing: 0.5,
+                    mb: 3,
+                    pb: 1,
+                    borderBottom: (theme) => `2px solid ${theme.palette.info.main}`,
+                    display: "flex",
+                    alignItems: "center",
+                }}
+            >
+                <ListAltIcon color="info" sx={{ mr: 1 }} />
                 All Orders
             </Typography>
 
