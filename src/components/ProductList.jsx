@@ -140,7 +140,7 @@ const ProductList = () => {
                   <strong>Brand:</strong> {product.brand}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
-                  <strong>Price:</strong> ₹{product.price}
+                  <strong>Price:</strong> ${product.price}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "#374151" }}>
                   <strong>Stock:</strong> {product.stock_quantity}
