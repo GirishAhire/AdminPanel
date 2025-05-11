@@ -1,6 +1,5 @@
-// AddProductForm.jsx
 import React, { useState } from "react";
-import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
+import { TextField, Button, Paper, Typography, Box, Stack } from "@mui/material";
 import { addProduct } from "../services/api";
 
 const AddProductForm = () => {
@@ -45,89 +44,72 @@ const AddProductForm = () => {
   };
 
   const textFieldStyle = {
+    width: "100%",
     "& .MuiOutlinedInput-root": {
-      borderRadius: 2,
-      backgroundColor: "#f0f4f8",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-      transition: "all 0.3s ease",
+      borderRadius: "12px",
+      backgroundColor: "#f8fafc",
+      boxShadow: "0 1px 4px rgba(0, 0, 0, 0.05)",
+      transition: "all 0.3s ease-in-out",
       "&:hover": {
-        backgroundColor: "#e8f0fe",
+        backgroundColor: "#e3f2fd",
       },
       "&.Mui-focused": {
-        backgroundColor: "#fff",
-        boxShadow: "0 0 0 2px rgba(25, 118, 210, 0.2)",
-        borderColor: "#1976d2",
+        backgroundColor: "#ffffff",
+        boxShadow: "0 0 0 3px rgba(25, 118, 210, 0.2)",
       },
     },
     "& .MuiInputLabel-root": {
-      fontWeight: 500,
+      fontWeight: 600,
       color: "#374151",
-      fontFamily: "Poppins, sans-serif",
-    },
-    "& .MuiOutlinedInput-input": {
-      fontFamily: "Poppins, sans-serif",
     },
   };
 
   return (
-    <Paper
-      elevation={6}
-      sx={{
-        p: 4,
-        borderRadius: 4,
-        width: "100%",
-        maxWidth: 700,
-        background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
-        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
-        transition: "transform 0.3s ease",
-        "&:hover": {
-          transform: "scale(1.01)",
-          boxShadow: "0 15px 30px rgba(0, 0, 0, 0.15)",
-        },
-      }}
-    >
-      <Typography
-        variant="h4"
-        align="center"
-        gutterBottom
+    <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 6 }}>
+      <Paper
+        elevation={3}
         sx={{
-          fontWeight: 700,
-          color: "#1f2937",
-          fontFamily: "Poppins, sans-serif",
-          mb: 3,
+          p: 4,
+          borderRadius: 4,
+          width: "90%",
+          maxWidth: "600px",
+          background: "linear-gradient(to right, #f8fafc, #e2e8f0)",
+          transition: "0.3s ease-in-out",
+          boxShadow: 3,
+          "&:hover": {
+            transform: "scale(1.01)",
+            boxShadow: 6,
+          },
         }}
       >
-        Add New Product
-      </Typography>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{ mb: 3, fontWeight: 700, color: "#1f2937" }}
+        >
+          Add New Product
+        </Typography>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Stack spacing={2} alignItems="center">
           <TextField
-            fullWidth
             label="Product Name"
             value={newProduct.name}
             onChange={(e) => handleChange("name", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12}>
           <TextField
-            fullWidth
             label="Description"
             multiline
-            rows={4}
+            rows={3}
             value={newProduct.description}
             onChange={(e) => handleChange("description", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12} sm={6}>
           <TextField
-            fullWidth
             label="Price"
             type="number"
             value={newProduct.price}
@@ -135,80 +117,58 @@ const AddProductForm = () => {
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12} sm={6}>
           <TextField
-            fullWidth
             label="Stock Quantity"
             type="number"
             value={newProduct.stock_quantity}
-            onChange={(e) =>
-              handleChange("stock_quantity", e.target.value)
-            }
+            onChange={(e) => handleChange("stock_quantity", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12} sm={6}>
           <TextField
-            fullWidth
             label="Category"
             value={newProduct.category}
             onChange={(e) => handleChange("category", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12} sm={6}>
           <TextField
-            fullWidth
             label="Brand"
             value={newProduct.brand}
             onChange={(e) => handleChange("brand", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12}>
           <TextField
-            fullWidth
             label="Image URL"
             value={newProduct.image_url}
             onChange={(e) => handleChange("image_url", e.target.value)}
             variant="outlined"
             sx={textFieldStyle}
           />
-        </Grid>
 
-        <Grid item xs={12}>
           <Button
-            fullWidth
             variant="contained"
-            color="primary"
             size="large"
             onClick={handleAddProduct}
             sx={{
+              mt: 2,
               fontWeight: 600,
-              textTransform: "uppercase",
               letterSpacing: 1,
-              fontFamily: "Poppins, sans-serif",
-              borderRadius: 2,
-              py: 1.5,
+              borderRadius: "10px",
+              width: "100%",
               background: "linear-gradient(to right, #1976d2, #0d47a1)",
-              "&:hover": {
-                background: "linear-gradient(to right, #1565c0, #0b3c91)",
-              },
             }}
           >
             Add Product
           </Button>
-        </Grid>
-      </Grid>
-    </Paper>
+        </Stack>
+      </Paper>
+    </Box>
   );
 };
 
