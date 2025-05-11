@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import {
+  Grid,
   Card,
   CardContent,
   Typography,
-  Grid,
   Button,
-  TextField,
+  Divider,
+  Box,
 } from "@mui/material";
 import {
   getLowStockProducts,
   updateProduct,
   deleteProduct,
 } from "../services/api";
+import EditProductDialog from "./EditProductDialog"; // ✅ updated import
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const [editStates, setEditStates] = useState({});
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     fetchProducts();
@@ -41,36 +44,42 @@ const ProductList = () => {
       .catch((err) => console.error(err));
   };
 
-  const handleEditToggle = (id) => {
-    setEditStates((prev) => ({
+  const handleEditOpen = (product) => {
+    setSelectedProduct(product);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setSelectedProduct(null);
+    setEditDialogOpen(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setSelectedProduct((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [field]: value,
     }));
   };
 
-  const handleInputChange = (id, field, value) => {
-    setProducts((prev) =>
-      prev.map((product) =>
-        product._id === id ? { ...product, [field]: value } : product
-      )
-    );
-  };
-
-  const handleUpdate = (id) => {
-    const product = products.find((p) => p._id === id);
+  const handleUpdate = () => {
     const updatedData = {
-      name: product.name,
-      description: product.description,
-      price: Number(product.price),
-      category: product.category,
-      brand: product.brand,
-      stock_quantity: Number(product.stock_quantity),
-      image_url: product.image_url,
+      name: selectedProduct.name,
+      description: selectedProduct.description,
+      price: Number(selectedProduct.price),
+      category: selectedProduct.category,
+      brand: selectedProduct.brand,
+      stock_quantity: Number(selectedProduct.stock_quantity),
+      image_url: selectedProduct.image_url,
     };
 
-    updateProduct(id, updatedData)
+    updateProduct(selectedProduct._id, updatedData)
       .then(() => {
-        handleEditToggle(id);
+        setProducts((prev) =>
+          prev.map((p) =>
+            p._id === selectedProduct._id ? { ...p, ...updatedData } : p
+          )
+        );
+        handleEditClose();
       })
       .catch((err) => console.error(err));
   };
@@ -81,138 +90,106 @@ const ProductList = () => {
         Manage Low Stock Products
       </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3} justifyContent="center">
         {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product._id}>
-            <Card>
-              <CardContent>
-                {editStates[product._id] ? (
-                  <>
-                    <TextField
-                      label="Name"
-                      value={product.name}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "name", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Description"
-                      value={product.description}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "description", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Category"
-                      value={product.category}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "category", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Brand"
-                      value={product.brand}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "brand", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Stock Quantity"
-                      type="number"
-                      value={product.stock_quantity}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "stock_quantity", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Price"
-                      type="number"
-                      value={product.price}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "price", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                    <TextField
-                      label="Image URL"
-                      value={product.image_url}
-                      onChange={(e) =>
-                        handleInputChange(product._id, "image_url", e.target.value)
-                      }
-                      fullWidth
-                      margin="dense"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Typography variant="h6">{product.name}</Typography>
-                    <Typography variant="body2">{product.description}</Typography>
-                    <Typography variant="body2">Category: {product.category}</Typography>
-                    <Typography variant="body2">Brand: {product.brand}</Typography>
-                    <Typography variant="body2">Stock: {product.stock_quantity}</Typography>
-                    <Typography variant="body2">Price: ${product.price}</Typography>
-                    <Typography variant="body2">
-                      Image:{" "}
-                      <a href={product.image_url} target="_blank" rel="noreferrer">
-                        View
-                      </a>
-                    </Typography>
-                  </>
-                )}
-
-                <div style={{ marginTop: "10px" }}>
-                  {editStates[product._id] ? (
-                    <>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleUpdate(product._id)}
-                        style={{ marginRight: "10px" }}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={() => handleEditToggle(product._id)}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="outlined"
-                        onClick={() => handleEditToggle(product._id)}
-                        style={{ marginRight: "10px" }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => handleDelete(product._id)}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </div>
+          <Grid item xs={12} sm={6} mt={5} md={4} key={product._id}>
+            <Card
+              sx={{
+                height: 300,
+                width: 275,
+                maxWidth: 380,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                boxShadow: 3,
+                borderRadius: 4,
+                background: "linear-gradient(to right, #f8fafc, #e2e8f0)",
+                transition: "0.3s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.01)",
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1, overflow: "hidden" }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: "#1f2937", mb: 1 }}>
+                  {product.name}
+                </Typography>
+                <Box sx={{ mb: 1 }}>
+                  <Typography variant="body2" sx={{ color: "#374151", fontWeight: 600 }}>
+                    Description:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#374151",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {product.description}
+                  </Typography>
+                </Box>
+                <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                  <strong>Category:</strong> {product.category}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                  <strong>Brand:</strong> {product.brand}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#374151", mb: 0.5 }}>
+                  <strong>Price:</strong> ₹{product.price}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#374151" }}>
+                  <strong>Stock:</strong> {product.stock_quantity}
+                </Typography>
               </CardContent>
+
+              <Divider sx={{ my: 1 }} />
+
+              <Box
+                sx={{
+                  px: 2,
+                  pb: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 1,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={() => handleEditOpen(product)}
+                  sx={{ fontWeight: 600, textTransform: "none", borderRadius: 2 }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  fullWidth
+                  onClick={() => handleDelete(product._id)}
+                  sx={{ fontWeight: 600, textTransform: "none", borderRadius: 2 }}
+                >
+                  Delete
+                </Button>
+              </Box>
             </Card>
           </Grid>
         ))}
       </Grid>
+
+      {/* ✅ Edit Dialog Popup */}
+      <EditProductDialog
+        open={editDialogOpen}
+        onClose={handleEditClose}
+        product={selectedProduct}
+        onChange={handleInputChange}
+        onSave={handleUpdate}
+      />
     </div>
   );
 };
